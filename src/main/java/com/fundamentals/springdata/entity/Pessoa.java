@@ -27,7 +27,7 @@ public abstract class Pessoa {
     private LocalDate dataNascimento;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_id_pk",nullable = false)
     private Endereco endereco;
 

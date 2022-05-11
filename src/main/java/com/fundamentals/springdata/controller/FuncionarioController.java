@@ -2,7 +2,9 @@ package com.fundamentals.springdata.controller;
 
 import com.fundamentals.springdata.entity.Funcionario;
 import com.fundamentals.springdata.entity.UF;
+import com.fundamentals.springdata.repository.CargoRepository;
 import com.fundamentals.springdata.repository.FuncionarioRepository;
+import com.fundamentals.springdata.repository.ProjetoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
 
+    public static final String FUNCIONARIO = "funcionario";
     @Autowired
     private FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    private CargoRepository cargoRepository;
+
+    @Autowired
+    private ProjetoRepository projetoRepository;
 
     @GetMapping
     public ModelAndView home(){
@@ -31,7 +40,8 @@ public class FuncionarioController {
     public ModelAndView detalhe(@PathVariable Long id){
         ModelAndView modelAndView = new ModelAndView("funcionario/detalhes");
 
-        modelAndView.addObject("funcionario", funcionarioRepository.getById(id));
+        modelAndView.addObject(FUNCIONARIO, funcionarioRepository.getById(id));
+        modelAndView.addObject("projetos", projetoRepository.findAll());
 
         return modelAndView;
     }
@@ -40,8 +50,9 @@ public class FuncionarioController {
     public ModelAndView cadastrar(){
         ModelAndView modelAndView = new ModelAndView("funcionario/formulario");
 
-        modelAndView.addObject("funcionario",new Funcionario());
+        modelAndView.addObject(FUNCIONARIO,new Funcionario());
         modelAndView.addObject("ufs", UF.values());
+        modelAndView.addObject("cargos", cargoRepository.findAll());
 
         return modelAndView;
     }
@@ -56,8 +67,10 @@ public class FuncionarioController {
     public ModelAndView editar(@PathVariable Long id){
 
         ModelAndView modelAndView = new ModelAndView("funcionario/formulario");
-        modelAndView.addObject("funcionario", funcionarioRepository.getById(id));
+        modelAndView.addObject(FUNCIONARIO, funcionarioRepository.getById(id));
         modelAndView.addObject("ufs", UF.values());
+        modelAndView.addObject("cargos", cargoRepository.findAll());
+
 
         return modelAndView;
     }
